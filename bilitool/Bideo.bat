@@ -106,20 +106,21 @@ for /d %%a in (*) do (
     )
     echo !cnt_dir! !cnt_file!
 
-    rem %% record the foot value of files
-    set /a sub=1
     if !cnt_dir! == !cnt_file! (
 
         rem %% move the file to the root dir
-        for /r %%d in (*.mp4) do (
-            echo %%d
-            move /Y %%d !res!\%%a\!sub!.mp4
-            set /a sub+=1
-        )
+        for /d %%d in (*) do (
+			echo %%d
+			cd %%d 
+			for /r %%e in (*.mp4) do (
+				move /Y %%e !res!\%%a\%%d.mp4
+			)
+			cd ..
+		)
 
         rem remove the dirs
-        for /d %%e in (*) do (
-            rm -rf %%e
+        for /d %%f in (*) do (
+            rm -rf %%f
         )
     )
 
