@@ -4,3 +4,5 @@ The usage of the tool:
 2. put the tool into the directory same with the video file
 3. click the bat file named 'Bideo.bat', the wait for a minute
 4. the file named 'result' is the videos converted file
+
+if you have the problem that a directory has many 'blv' file need to be merged, click the blvmerge.bat to handle it.
