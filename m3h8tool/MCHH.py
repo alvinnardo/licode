@@ -24,7 +24,7 @@ def MCHH_transfer(dir):
                     num_list[i])+'0'*(max_length-len(num_list[i]))+num_list[i])
 
 # 合并
-def MCHH_merge(dir, num_vedio):
+def MCHH_merge(dir, num_vedio, Type):
     path_list = [os.path.join(root, file)
                  for root, dirs, files in os.walk(dir) for file in files if len(file)<20]
     
@@ -37,19 +37,28 @@ def MCHH_merge(dir, num_vedio):
         os.mkdir('result_merge')
     
     # 结尾的文件名可以自己做调整
-    os.system(r"ffmpeg -f concat -safe 0 -i merge.txt -c copy result_merge\\第" + str(num_vedio) +"集.mp4")
-    os.remove('merge.txt')
+    if(Type==True):
+        os.system(r"ffmpeg -f concat -safe 0 -i merge.txt -c copy result_merge\\第" + str(num_vedio) +"集.mp4")
+        os.remove('merge.txt')
+    else:
+        os.system(r"ffmpeg -f concat -safe 0 -i merge.txt -c copy result_merge\\"+dir+".mp4")
+        os.remove('merge.txt')
 
 
 cd = os.getcwd()
+# 命名方式：Ture是采用默认序号，False使用文件名命名
+Type = False
 # 从1开始，可以调整
 num_vedio = 1
+
+
 
 for root, dirs, files in os.walk(cd):
     for dir in dirs: 
         if dir == '__pycache__' or dir == 'result_merge':
             continue
         else:
+            print(dir)
             MCHH_transfer(dir)
-            MCHH_merge(dir, num_vedio)
+            MCHH_merge(dir, num_vedio, Type)
             num_vedio += 1
