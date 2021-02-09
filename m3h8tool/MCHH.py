@@ -41,6 +41,13 @@ def MCHH_merge(dir, num_vedio, Type):
         os.system(r"ffmpeg -f concat -safe 0 -i merge.txt -c copy result_merge\\第" + str(num_vedio) +"集.mp4")
         os.remove('merge.txt')
     else:
+        dir = dir.replace(' - ', '_')
+        dir = dir.replace('/', '_')
+        dir = dir.replace(' ', '_')
+        dir = dir.replace('|', '_')
+        dir = dir.replace('!', '_')
+        dir = dir.replace('！', '_')
+        print(dir)
         os.system(r"ffmpeg -f concat -safe 0 -i merge.txt -c copy result_merge\\"+dir+".mp4")
         os.remove('merge.txt')
 
