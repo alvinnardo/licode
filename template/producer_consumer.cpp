@@ -45,6 +45,7 @@ class Parser {
                 continue;
             }
 
+            // sleep(1); // 模拟解析慢
             auto tstr = std::to_string(*tptr) + "_x";
             sink_queue_ptr->push(tstr);
         }
@@ -70,7 +71,7 @@ class Sinker {
 
 int main(void) {
 
-    int thread_count = 1;
+    int thread_count = 3;
     // 创建两个队列
     intQueuePtr source_queue_ptr = make_shared<CircleQueue<int>>();
     stringQueuePtr sink_queue_ptr = make_shared<CircleQueue<string>>();
@@ -89,8 +90,27 @@ int main(void) {
 
     std::vector<std::thread> parser_thread_vec;
     for (int i = 0; i < thread_count; i++) {
-        parser_thread_vec.push_back(
-            std::thread([&]() { parser_vec[i]->flow(); }));
+
+        // 将函数和变量分开
+        // 原地构造一个线程，接口是 std::thread{function_name, args}
+        parser_thread_vec.emplace_back(
+            [&](int idx) { parser_vec[idx]->flow(); }, i);
+
+        // 以下方式也可以
+        // parser_thread_vec.emplace_back(
+        //     [i, parser_vec] { parser_vec[i]->flow(); });
+
+        // 以下方式不可以
+        // std::thread 只能移动不能拷贝，所以要避免使用拷贝构造函数
+        // parser_thread_vec.push_back(std::thread{[&](int idx) { parser_vec[i]->flow(); }, i});
+
+        // 另一种方式
+        // std::thread th{[&](int idx) {parser_vec[idx]->flow();}, i};
+        // 以下方式不可以，触发了拷贝构造函数
+        // parser_thread_vec.push_back(th);
+
+        // 以下方式可以，使用移动构造函数
+        // parser_thread_vec.push_back(std::move(th));
     }
     std::thread sinker_thread([&]() { sinker->flow(); });
 
