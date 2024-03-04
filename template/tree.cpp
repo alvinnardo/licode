@@ -1,4 +1,4 @@
-#include "../leetcode/head.h"
+#include "head.h"
 #include <bits/stdc++.h>
 using namespace std;
 
