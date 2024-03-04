@@ -1,4 +1,4 @@
-#include "head.h"
+#include "../template/head.h"
 #include <bits/stdc++.h>
 using namespace std;
 
