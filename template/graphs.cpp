@@ -47,14 +47,14 @@ void unweightedGraphs() {
     printVector(dist);
 }
 
-// 模板中的比较器
-class less {
+// 模板中的比较器，用 struct 改写，保证是 public 的
+struct m_less {
     bool operator()(const pair<int, int> &a, const pair<int, int> &b) {
         return a.second < b.second;
     }
 };
 
-class greater {
+struct m_greater {
     bool operator()(const pair<int, int> &a, const pair<int, int> &b) {
         return a.second > b.second;
     }
@@ -65,13 +65,14 @@ class greater {
 void dijkstra() {
     // 这里使用有向边做示例
     int n = 6;
-    vector<vector<int>> edges{{0, 1, 1},  {0, 2, 1},  {1, 2, 9},
-                              {1, 3, 3},  {3, 2, 4},  {2, 4, 5},
-                              {3, 4, 13}, {3, 5, 15}, {4, 5, 4}};
-    vector<vector<int>> nei(n, vector<int>(n, INT_MAX));
+    vector<vector<int>> ori_edges{{0, 1, 1},  {0, 2, 1},  {1, 2, 9},
+                                  {1, 3, 3},  {3, 2, 4},  {2, 4, 5},
+                                  {3, 4, 13}, {3, 5, 15}, {4, 5, 4}};
+    vector<vector<pair<int, int>>> edges(n);
 
-    for (auto &edge : edges) {
-        nei[edge[0]][edge[1]] = edge[2];
+    for (auto &e : ori_edges) {
+        edges[e[0]].emplace_back(e[1], e[2]);
+        // edges[e[1]].emplace_back(e[0], e[2]); // 双向边
     }
 
     // 这里的 less 和 greater 表示排好序后第一个数和下一个数的比较关系
@@ -84,16 +85,15 @@ void dijkstra() {
     // 优先队列就是用的堆，每次出堆要把堆顶元素放到当前数组长度的末尾，然后数组长度减一
     // 比如大根堆，每次出堆出最大的，但是它本身排好序后是从小到大的
 
+    // 前面存距离，后面存节点号，可以直接利用距离排序
     std::priority_queue<pair<int, int>, vector<pair<int, int>>,
                         std::greater<pair<int, int>>>
         pq;
 
-    vector<bool> visited(n, false);
     vector<int> dist(n, INT_MAX);
     vector<int> path(n, -1);
 
     // init
-    visited[0] = true;
     dist[0] = 0;
     pq.emplace(0, 0);
 
@@ -101,19 +101,26 @@ void dijkstra() {
     while (!pq.empty()) {
         auto t = pq.top();
         pq.pop();
-        int node = t.first;
-        int d = t.second;
+        int d = t.first; // 注意前面是举例，后面是节点
+        int pn = t.second;
 
-        for (int i = 0; i < n; i++) {
-            if (nei[node][i] != INT_MAX) {
-                if (visited[i] == true) {
-                    continue;
-                }
+        // 避免重复遍历，dist 已经被改小了，之前大的值就不成立了
+        if (d > dist[pn]) {
+            continue;
+        }
 
-                dist[i] = min(dist[i], dist[node] + nei[node][i]);
-                visited[i] = true;
-                path[i] = node;
-                pq.emplace(i, dist[i]); // 放入的是从源到本节点的总路径长度
+        // 这里没有用 visited 数组，其实无权图是有权图的一个特例
+        // 无权图中，之后扫描的点肯定小于之前的点
+        // 有权图中，路径可能会变小，所以要判断
+        for (auto &p : edges[pn]) {
+            int cn = p.first;
+            int cd = p.second;
+            int newd = dist[pn] + cd;
+
+            if (newd < dist[cn]) { // 有更小的路径
+                dist[cn] = newd;
+                path[cn] = pn;
+                pq.emplace(dist[cn], cn); // 放入的是从源到本节点的总路径长度
             }
         }
     }
