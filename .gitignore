@@ -1,2 +1,4 @@
-template/a.out
-leetcode/a.out
+template/a.*
+template/core.*
+leetcode/a.*
+leetcode/core.*
