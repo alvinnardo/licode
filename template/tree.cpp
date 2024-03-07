@@ -6,12 +6,10 @@ template <class T> struct TreeNode {
     T val;
     TreeNode *left = nullptr;
     TreeNode *right = nullptr;
-    TreeNode(T x) { val = x; }
-    TreeNode(T x, TreeNode *left, TreeNode *right) {
-        val = x;
-        this->left = left;
-        this->right = right;
-    }
+    TreeNode() : val(0) {}
+    TreeNode(T x) : val(x) {}
+    TreeNode(T x, TreeNode *left, TreeNode *right)
+        : val(x), left(left), right(right) {}
 };
 
 template <class T> vector<T> preEnumTree(TreeNode<T> *root) {
@@ -103,8 +101,44 @@ void testBuildPreMidTree() {
     printVector(tailEnumTree(root));
 }
 
-int main(void) {
-    testBuildPreMidTree();
+template <class T> TreeNode<T> *buildTree(const vector<T> &vv) {
+    TreeNode<T> *root = new TreeNode<T>(vv[0]);
 
-    return 0;
+    queue<TreeNode<T> *> qu;
+    qu.push(root);
+    int j = 1;
+
+    while (!qu.empty()) {
+        TreeNode<T> *top = qu.front();
+        qu.pop();
+
+        if (j >= vv.size()) continue;
+        if (vv[j] == -1) {
+            top->left = nullptr;
+        } else {
+            top->left = new TreeNode<T>(vv[j]);
+            qu.push(top->left);
+        }
+        j++;
+
+        if (vv[j] == -1) {
+            top->right = nullptr;
+        } else {
+            top->right = new TreeNode<T>(vv[j]);
+            qu.push(top->right);
+        }
+        j++;
+    }
+    return root;
 }
+
+void testBuildTree() {
+    vector<int> vv{1, -1, 1, 1, 1, -1, -1, 1, 1, -1, 1, -1, -1, -1, 1, -1, -1};
+    buildTree(vv);
+}
+
+// int main(void) {
+//     testBuildPreMidTree();
+//
+//     return 0;
+// }
