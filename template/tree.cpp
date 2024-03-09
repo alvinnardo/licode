@@ -2,16 +2,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-template <class T> struct TreeNode {
-    T val;
-    TreeNode *left = nullptr;
-    TreeNode *right = nullptr;
-    TreeNode() : val(0) {}
-    TreeNode(T x) : val(x) {}
-    TreeNode(T x, TreeNode *left, TreeNode *right)
-        : val(x), left(left), right(right) {}
-};
-
 template <class T> vector<T> preEnumTree(TreeNode<T> *root) {
     vector<T> res;
 
@@ -71,7 +61,7 @@ TreeNode<T> *buildPreMidTree(const vector<T> &pre_nums,
     T val = pre_nums[pre_left];
     TreeNode<T> *root = new TreeNode<T>(val);
 
-    int mid_mid = -1;
+    int mid_mid = INT_MIN;
     for (int i = mid_left; i <= mid_right; i++) {
         if (mid_nums[i] == val) {
             mid_mid = i;
@@ -112,8 +102,9 @@ template <class T> TreeNode<T> *buildTree(const vector<T> &vv) {
         TreeNode<T> *top = qu.front();
         qu.pop();
 
-        if (j >= vv.size()) continue;
-        if (vv[j] == -1) {
+        if (j >= vv.size())
+            continue;
+        if (vv[j] == INT_MIN) {
             top->left = nullptr;
         } else {
             top->left = new TreeNode<T>(vv[j]);
@@ -121,7 +112,7 @@ template <class T> TreeNode<T> *buildTree(const vector<T> &vv) {
         }
         j++;
 
-        if (vv[j] == -1) {
+        if (vv[j] == INT_MIN) {
             top->right = nullptr;
         } else {
             top->right = new TreeNode<T>(vv[j]);
@@ -133,7 +124,7 @@ template <class T> TreeNode<T> *buildTree(const vector<T> &vv) {
 }
 
 void testBuildTree() {
-    vector<int> vv{1, -1, 1, 1, 1, -1, -1, 1, 1, -1, 1, -1, -1, -1, 1, -1, -1};
+    vector<int> vv{1, INT_MIN, 1, 1, 1, INT_MIN, INT_MIN, 1, 1, INT_MIN, 1, INT_MIN, INT_MIN, INT_MIN, 1, INT_MIN, INT_MIN};
     buildTree(vv);
 }
 
