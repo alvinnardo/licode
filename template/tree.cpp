@@ -123,8 +123,30 @@ template <class T> TreeNode<T> *buildTree(const vector<T> &vv) {
     return root;
 }
 
+TreeNode<int> *lowestCommonAncestor(TreeNode<int> *root, TreeNode<int> *p,
+                                    TreeNode<int> *q) {
+    // 有一个是，就不向下找了；如果另一个也有，肯定是根，如果没有，就是当前子树
+    if (!root || root == p || root == q) {
+        return root;
+    }
+
+    auto left = lowestCommonAncestor(root->left, p, q);
+    auto right = lowestCommonAncestor(root->right, p, q);
+
+    if (left && right) { // 左边也有，右边也有，返回根
+        return root;
+    }
+
+    if (left) {
+        return root->left;
+    }
+    return root->right; // 右子树和空合并返回结果，左边没有，右边也没有
+}
+
 void testBuildTree() {
-    vector<int> vv{1, INT_MIN, 1, 1, 1, INT_MIN, INT_MIN, 1, 1, INT_MIN, 1, INT_MIN, INT_MIN, INT_MIN, 1, INT_MIN, INT_MIN};
+    vector<int> vv{1,       INT_MIN, 1, 1,       1,      INT_MIN,
+                   INT_MIN, 1,       1, INT_MIN, 1,      INT_MIN,
+                   INT_MIN, INT_MIN, 1, INT_MIN, INT_MIN};
     buildTree(vv);
 }
 
