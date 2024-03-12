@@ -143,6 +143,43 @@ TreeNode<int> *lowestCommonAncestor(TreeNode<int> *root, TreeNode<int> *p,
     return root->right; // 右子树和空合并返回结果，左边没有，右边也没有
 }
 
+// 并查集
+struct UnionFind {
+    vector<int> vv;
+    UnionFind(int n) {
+        vv.assign(n, 0);
+        iota(vv.begin(), vv.end(), 0);
+    }
+
+    void unionTwo(int a, int b) {
+        int fa = findX(a);
+        int fb = findX(b);
+
+        vv[fb] = fa;
+    }
+
+    int findX(int a) {
+        if (vv[a] != a) {
+            vv[a] = findX(vv[a]);
+        }
+        return vv[a];
+    }
+
+    int count() {
+        int cnt = 0;
+        for (int i = 0; i < vv.size(); i++) {
+            if (vv[i] == i) {
+                cnt++;
+            }
+        }
+        return cnt;
+    }
+};
+
+// 最小生成树
+// 铺路, 连接所有城市，使铺设花费最少
+// 1. 按边贪心
+
 void testBuildTree() {
     vector<int> vv{1,       INT_MIN, 1, 1,       1,      INT_MIN,
                    INT_MIN, 1,       1, INT_MIN, 1,      INT_MIN,
@@ -150,8 +187,9 @@ void testBuildTree() {
     buildTree(vv);
 }
 
-// int main(void) {
-//     testBuildPreMidTree();
-//
-//     return 0;
-// }
+int main(void) {
+    // testBuildPreMidTree();
+    UnionFind ud(10);
+
+    return 0;
+}
