@@ -174,11 +174,80 @@ struct UnionFind {
         }
         return cnt;
     }
+
+    bool isConnected(int a, int b) {
+        int fa = findX(a);
+        int fb = findX(b);
+
+        return fa == fb;
+    }
 };
 
 // 最小生成树
 // 铺路, 连接所有城市，使铺设花费最少
-// 1. 按边贪心
+// 1. Kruskal 按边贪心（用到并查集）
+void Kruskal() {
+    struct Edge {
+        int x;
+        int y;
+        int len;
+        Edge(int x, int y, int len) : x(x), y(y), len(len) {}
+    };
+    auto cmp = [](Edge &a, Edge &b) { return a.len < b.len; };
+
+    vector<Edge> vv{{0, 1, 6}, {0, 2, 1}, {0, 3, 5}, {1, 2, 5}, {1, 4, 3},
+                    {2, 3, 5}, {2, 4, 6}, {2, 5, 4}, {3, 5, 2}, {4, 5, 6}};
+
+    sort(vv.begin(), vv.end(), cmp);
+    UnionFind ud(6);
+
+    // 每次获取最小的一条边
+    // 如果已经连接过，就跳过
+    int sum = 0;
+    for (int i = 0; i < vv.size(); i++) {
+        int x = vv[i].x;
+        int y = vv[i].y;
+        if (!ud.isConnected(x, y)) {
+            ud.unionTwo(x, y);
+            sum += vv[i].len;
+        }
+    }
+
+    int cnt = ud.count();
+    if (cnt == 1) {
+        cout << "yes: " << sum << endl;
+    } else {
+        cout << "no" << endl;
+    }
+}
+
+// 2. Prim 按点贪心
+void Prim() {}
+
+void minimumTree() {
+    vector<vector<int>> vv(6, vector<int>(6, -1));
+    Kruskal();
+    vv[0][1] = 6;
+    vv[1][0] = 6;
+    vv[0][2] = 1;
+    vv[2][0] = 1;
+    vv[0][3] = 5;
+    vv[3][0] = 5;
+    vv[1][2] = 5;
+    vv[2][1] = 5;
+    vv[1][4] = 3;
+    vv[4][1] = 3;
+    vv[2][3] = 5;
+    vv[3][2] = 5;
+    vv[2][4] = 6;
+    vv[4][2] = 6;
+    vv[2][5] = 4;
+    vv[5][2] = 4;
+    vv[3][5] = 2;
+    vv[5][3] = 2;
+    vv[4][5] = 6;
+    vv[5][4] = 6;
+}
 
 void testBuildTree() {
     vector<int> vv{1,       INT_MIN, 1, 1,       1,      INT_MIN,
@@ -189,7 +258,8 @@ void testBuildTree() {
 
 int main(void) {
     // testBuildPreMidTree();
-    UnionFind ud(10);
+    // UnionFind ud(10);
+    minimumTree();
 
     return 0;
 }
