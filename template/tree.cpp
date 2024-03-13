@@ -144,6 +144,8 @@ TreeNode<int> *lowestCommonAncestor(TreeNode<int> *root, TreeNode<int> *p,
 }
 
 // 并查集
+// 查找 O(h)
+// 合并 O(h)
 struct UnionFind {
     vector<int> vv;
     UnionFind(int n) {
@@ -186,6 +188,7 @@ struct UnionFind {
 // 最小生成树
 // 铺路, 连接所有城市，使铺设花费最少
 // 1. Kruskal 按边贪心（用到并查集）
+// 时间复杂度 O(eloge)
 void Kruskal() {
     struct Edge {
         int x;
@@ -222,31 +225,74 @@ void Kruskal() {
 }
 
 // 2. Prim 按点贪心
-void Prim() {}
+// 时间复杂度 O(n2)
+void Prim() {
+    int num = 6;
+    vector<vector<int>> vv{{0, 1, 6}, {0, 2, 1}, {0, 3, 5}, {1, 2, 5},
+                           {1, 4, 3}, {2, 3, 5}, {2, 4, 6}, {2, 5, 4},
+                           {3, 5, 2}, {4, 5, 6}};
+    vector<vector<pair<int, int>>> neibor(num);
+
+    for (auto &edge : vv) {
+        neibor[edge[0]].emplace_back(edge[1], edge[2]);
+        neibor[edge[1]].emplace_back(edge[0], edge[2]);
+    }
+
+    vector<int> dist(num, INT_MAX); // 保存最小边
+
+    queue<int> qu;
+    unordered_set<int> uset;
+
+    // init
+    qu.push(0);
+    dist[0] = 0;
+
+    int sum = 0;
+
+    while (!qu.empty()) {
+        int t = qu.front();
+        qu.pop();
+        uset.insert(t);
+
+        for (auto &edge : neibor[t]) {
+            int node = edge.first;
+            int val = edge.second;
+            if (uset.find(node) != uset.end()) {
+                continue;
+            }
+
+            if (val < dist[node]) {
+                dist[node] = val;
+            }
+        }
+
+        int min_pos = -1;
+        int min_val = INT_MAX;
+        for (int i = 0; i < num; i++) {
+            if (uset.find(i) == uset.end()) {
+                if (dist[i] < min_val) {
+                    min_val = dist[i];
+                    min_pos = i;
+                }
+            }
+        }
+
+        if (min_pos != -1) {
+            sum += min_val;
+            qu.push(min_pos);
+        }
+    }
+
+    if (uset.size() == num) {
+        cout << "yes: " << sum << endl;
+    } else {
+        cout << "no" << endl;
+    }
+}
 
 void minimumTree() {
-    vector<vector<int>> vv(6, vector<int>(6, -1));
     Kruskal();
-    vv[0][1] = 6;
-    vv[1][0] = 6;
-    vv[0][2] = 1;
-    vv[2][0] = 1;
-    vv[0][3] = 5;
-    vv[3][0] = 5;
-    vv[1][2] = 5;
-    vv[2][1] = 5;
-    vv[1][4] = 3;
-    vv[4][1] = 3;
-    vv[2][3] = 5;
-    vv[3][2] = 5;
-    vv[2][4] = 6;
-    vv[4][2] = 6;
-    vv[2][5] = 4;
-    vv[5][2] = 4;
-    vv[3][5] = 2;
-    vv[5][3] = 2;
-    vv[4][5] = 6;
-    vv[5][4] = 6;
+    Prim();
 }
 
 void testBuildTree() {
