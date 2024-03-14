@@ -202,11 +202,39 @@ void selection_sort(vector<int> vv) {
     printVector(vv);
 }
 
+// 需要有范围
+// 最好 O(n + k)
+// 最坏 O(n + k)
+// 平均 O(n + k)
+// 空间 O(n + k)
+// 稳定
 void counting_sort(vector<int> vv) {
     cout << "=== Counting Sort ===" << endl;
+    int minv = INT_MAX, maxv = INT_MIN;
+    for (auto i : vv) {
+        minv = min(minv, i);
+        maxv = max(maxv, i);
+    }
+
+    int n = maxv - minv + 1;
+    vector<int> tmp(n);
+    for (auto i : vv) {
+        tmp[i - minv]++;
+    }
+
+    int j = 0;
+    for (int i = 0; i < tmp.size(); i++) {
+        while (tmp[i] > 0) {
+            vv[j] = i + minv;
+            j++;
+            tmp[i]--;
+        }
+    }
     printVector(vv);
 }
 
+// 一种分治思想
+// 建立 k 桶，为了平均，2^k = n
 void bucket_sort(vector<int> vv) {
     cout << "=== Bucket Sort ===" << endl;
     printVector(vv);
