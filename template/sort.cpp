@@ -107,12 +107,8 @@ void insert_sort(vector<int> vv) {
     for (int i = 1; i < sz; i++) {
         int t = vv[i];
         int j = i - 1;
-        for (; j >= 0; j--) {
-            if (vv[j] > t) {
-                vv[j + 1] = vv[j];
-            } else {
-                break;
-            }
+        for (; j >= 0 && vv[j] > t; j--) {
+            vv[j + 1] = vv[j];
         }
 
         vv[j + 1] = t;
@@ -132,13 +128,14 @@ void heal_sort(vector<int> vv) {
     cout << "=== Heal Sort ===" << endl;
     int sz = vv.size();
     for (int step = sz >> 1; step > 0; step >>= 1) {
+        // 将相等步长的分为一组，进行插入排序
         for (int i = step; i < sz; i++) {
-            int temp = vv[i];
-            int j;
-            for (j = i - step; j >= 0 && vv[j] > temp; j -= step) {
+            int t = vv[i];
+            int j = i - step;
+            for (; j >= 0 && vv[j] > t; j -= step) {
                 vv[j + step] = vv[j];
             }
-            vv[j + step] = temp;
+            vv[j + step] = t;
         }
     }
 
@@ -183,6 +180,43 @@ void std_sort(vector<int> vv) {
     printVector(vv);
 }
 
+// 从后面选择一个最小的
+// O(n2)
+void selection_sort(vector<int> vv) {
+    cout << "=== Selection Sort ===" << endl;
+    int sz = vv.size();
+    for (int i = 0; i < sz; i++) {
+        int minv = vv[i];
+        int min_pos = i;
+        int j = i + 1;
+        for (; j < sz; j++) {
+            if (vv[j] < minv) {
+                minv = vv[j];
+                min_pos = j;
+            }
+        }
+
+        vv[min_pos] = vv[i];
+        vv[i] = minv;
+    }
+    printVector(vv);
+}
+
+void counting_sort(vector<int> vv) {
+    cout << "=== Counting Sort ===" << endl;
+    printVector(vv);
+}
+
+void bucket_sort(vector<int> vv) {
+    cout << "=== Bucket Sort ===" << endl;
+    printVector(vv);
+}
+
+void radix_sort(vector<int> vv) {
+    cout << "=== Radix Sort ===" << endl;
+    printVector(vv);
+}
+
 int main(void) {
     vector<int> vv(
         {1, 10, 3, 3, 2, 3, 98, 16, 22, 14, 31, 1, 1, 87, 3, 2, 14, 22});
@@ -190,11 +224,15 @@ int main(void) {
 
     std_sort(vv);
     bubble_sort(vv);
+    selection_sort(vv);
     insert_sort(vv);
-    quick_sort(vv);
-    merge_sort(vv);
-    heap_sort(vv);
     heal_sort(vv);
+    merge_sort(vv);
+    quick_sort(vv);
+    heap_sort(vv);
+    counting_sort(vv);
+    bucket_sort(vv);
+    radix_sort(vv);
 
     return 0;
 }
