@@ -233,10 +233,46 @@ void counting_sort(vector<int> vv) {
     printVector(vv);
 }
 
-// 一种分治思想
-// 建立 k 桶，为了平均，2^k = n
+// 利用分治思想，是计数排序的升级版
+// 设置多个桶，将数字依次放入桶中，并将每个桶中的数字排序
+// 在放入桶前计算排序关键字与桶的映射关系，使每个桶中数量尽量均匀
+// 能达到线性时间复杂度 O(n)
 void bucket_sort(vector<int> vv) {
     cout << "=== Bucket Sort ===" << endl;
+    int sz = vv.size();
+    int bucket_num = 10; // 这个自定义，根据数组最大值和最小值，尽量做到均匀
+    vector<vector<int>> buckets(bucket_num);
+    int minv = INT_MAX, maxv = INT_MIN;
+    for (auto &num : vv) {
+        minv = min(minv, num);
+        maxv = max(maxv, num);
+    }
+
+    // 得到每个桶中能够放的个数
+    // 总数字个数 + 桶大小 即向上取整
+    int dur = (maxv - minv + 1 + bucket_num) / bucket_num;
+
+    for (auto &num : vv) {
+        int idx = (num - minv) / dur; // 映射关系，左闭右闭
+        buckets[idx].push_back(num);
+    }
+
+    int idx = 0;
+    for (auto &bucket : buckets) {
+        for (int i = 1; i < bucket.size(); i++) {
+            int t = bucket[i];
+            int j = i - 1;
+            for (; j >= 0 && bucket[j] > t; j--) {
+                bucket[j + 1] = bucket[j];
+            }
+
+            bucket[j + 1] = t;
+        }
+        for (auto &t : bucket) {
+            vv[idx++] = t;
+        }
+    }
+
     printVector(vv);
 }
 
@@ -248,7 +284,6 @@ void radix_sort(vector<int> vv) {
 int main(void) {
     vector<int> vv(
         {1, 10, 3, 3, 2, 3, 98, 16, 22, 14, 31, 1, 1, 87, 3, 2, 14, 22});
-    vector<int> svv(vv);
 
     std_sort(vv);
     bubble_sort(vv);
@@ -258,6 +293,8 @@ int main(void) {
     merge_sort(vv);
     quick_sort(vv);
     heap_sort(vv);
+
+    // 以下三种思想类似，不是两两比较，而是先用一个范围包住
     counting_sort(vv);
     bucket_sort(vv);
     radix_sort(vv);
