@@ -164,7 +164,10 @@ void bubble_sort(vector<int> ori) {
 // 堆排序
 // 最坏 O(nlogn)
 // 平均 O(nlogn)
-void heap_sort(vector<int> vv) { cout << "=== Heap Sort ===" << endl; }
+void heap_sort(vector<int> vv) {
+    cout << "=== Heap Sort ===" << endl;
+    int sz = vv.size();
+}
 
 // STL 中的 std::sort() 并不全是快排
 // 结合内省排序 + 插入排序
@@ -174,6 +177,14 @@ void heap_sort(vector<int> vv) { cout << "=== Heap Sort ===" << endl; }
 // 当分段数据量较少(16)时，使用插入排序，当数据比较有序时，插入排序效率更高
 // 然后查看递归层次, 当递归层次太深的时候，退化成 O(n2), 使用堆排序
 // 否则使用快排
+
+/* 为什么不直接用堆排序？
+   堆排序又不需要递归，最差也是 O(nlogn), 而快排最差是 O(n2)
+   1. 快排分块之后有局部性原理，而堆排序会长距离跳跃，访问方式不友好
+   2. 在相对有序的数据中，建堆过程中，会打破原有的顺序，
+      平均比快排数据交换次数更多，用时更长
+*/
+
 void std_sort(vector<int> vv) {
     cout << "=== STL Sort ===" << endl;
     std::sort(vv.begin(), vv.end());
