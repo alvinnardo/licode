@@ -1,3 +1,5 @@
+a.*
+core.*
 template/a.*
 template/core.*
 leetcode/a.*
