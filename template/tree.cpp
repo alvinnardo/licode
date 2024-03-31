@@ -302,10 +302,10 @@ void testBuildTree() {
     buildTree(vv);
 }
 
-int main(void) {
+// int main(void) {
     // testBuildPreMidTree();
     // UnionFind ud(10);
-    minimumTree();
+    // minimumTree();
 
-    return 0;
-}
+    // return 0;
+// }
