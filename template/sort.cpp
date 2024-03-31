@@ -287,8 +287,37 @@ void bucket_sort(vector<int> vv) {
     printVector(vv);
 }
 
+// 准备十个桶
+// 每次按一个数位排序，拿出，再进行下一位排序
 void radix_sort(vector<int> vv) {
     cout << "=== Radix Sort ===" << endl;
+    vector<queue<int>> vec(10);
+    int mod = 10, div = 1;
+
+    // 当 cnt 都是数组大小的时候，就不进行下一次排序了，因为最高位都是 0 了
+    int cnt = 0;
+    while (cnt != vv.size()) {
+        cnt = 0;
+        for (auto &i : vv) {
+            int t = (i % mod) / div;
+            vec[t].push(i);
+            if (i / div == 0) { // 除法看最高位
+                cnt++;
+            }
+        }
+
+        mod *= 10;
+        div *= 10;
+
+        int idx = 0;
+        for (int i = 0; i < 10; i++) {
+            while (!vec[i].empty()) {
+                int t = vec[i].front();
+                vec[i].pop();
+                vv[idx++] = t;
+            }
+        }
+    }
     printVector(vv);
 }
 
