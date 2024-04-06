@@ -167,6 +167,38 @@ void bubble_sort(vector<int> ori) {
 void heap_sort(vector<int> vv) {
     cout << "=== Heap Sort ===" << endl;
     int sz = vv.size();
+
+    function<void(vector<int> &, int, int)> maxHeapify =
+        [&](vector<int> &a, int i, int heapSize) {
+            int l = i * 2 + 1, r = i * 2 + 2, largest = i;
+            if (l < heapSize && a[l] > a[largest]) {
+                largest = l;
+            }
+
+            if (r < heapSize && a[r] > a[largest]) {
+                largest = r;
+            }
+
+            if (largest != i) {
+                swap(a[i], a[largest]);
+                maxHeapify(a, largest, heapSize);
+            }
+        };
+
+    auto buildMaxHeap = [&](vector<int> &a, int heapSize) {
+        for (int i = heapSize / 2; i >= 0; --i) {
+            maxHeapify(a, i, heapSize);
+        }
+    };
+
+    buildMaxHeap(vv, sz);
+    for (int i = sz - 1; i >= 0; i--) {
+        swap(vv[0], vv[i]);
+        --sz;
+        maxHeapify(vv, 0, sz);
+    }
+
+    printVector(vv);
 }
 
 // STL 中的 std::sort() 并不全是快排
