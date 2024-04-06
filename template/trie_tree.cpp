@@ -2,6 +2,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// 插入和查询的时间复杂度都是 O(|S|)
 class Trie {
   private:
     vector<Trie *> children;
