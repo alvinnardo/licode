@@ -32,15 +32,28 @@ static int getRandom(int a, int b) {
     return (e() % (b - a + 1)) + a;
 }
 
-static vector<int> getNRandom(int a, int b, int n) {
+static vector<int> getNRandom(int a, int b, int n, bool unique = false) {
     std::default_random_engine e;
     e.seed(time(0));
 
     auto getRangeNum = [&]() { return (e() % (b - a + 1)) + a; };
+    if (unique && b - a + 1 <= n) {
+        cout << "range larger than n in unique mode" << endl;
+        return {};
+    }
 
     vector<int> res;
+    unordered_set<int> uset;
     for (int i = 0; i < n; i++) {
-        res.push_back(getRangeNum());
+        int t = getRangeNum();
+        if (unique) {
+            while (uset.find(t) != uset.end()) {
+                t = getRangeNum();
+            }
+            uset.insert(t);
+        }
+
+        res.push_back(t);
     }
     return res;
 }
