@@ -18,7 +18,9 @@ template <class T> void printVector(const vector<T> &nums) {
         oss << t << ",";
     }
     auto res = oss.str();
-    res.pop_back();
+    if (!res.empty()) {
+        res.pop_back();
+    }
     cout << res << endl;
 }
 
