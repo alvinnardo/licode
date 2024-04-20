@@ -31,17 +31,15 @@ template <class T> void printVectorVector(const vector<vector<T>> &nums) {
 }
 
 static int getRandom(int a, int b) {
-    std::default_random_engine e;
-    e.seed(time(0));
+    srand(time(NULL));
 
-    return (e() % (b - a + 1)) + a;
+    return (rand() % (b - a + 1)) + a;
 }
 
 static vector<int> getNRandom(int a, int b, int n, bool unique = false) {
-    std::default_random_engine e;
-    e.seed(time(0));
+    srand(time(NULL));
 
-    auto getRangeNum = [&]() { return (e() % (b - a + 1)) + a; };
+    auto getRangeNum = [&]() { return (rand() % (b - a + 1)) + a; };
     if (unique && b - a + 1 <= n) {
         cout << "range larger than n in unique mode" << endl;
         return {};
