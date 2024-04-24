@@ -91,7 +91,7 @@ void testBuildPreMidTree() {
     printVector(tailEnumTree(root));
 }
 
-template <class T> TreeNode<T> *buildTree(const vector<T> &vv) {
+template <class T> TreeNode<T> *buildTree(vector<T> vv) {
     TreeNode<T> *root = new TreeNode<T>(vv[0]);
 
     queue<TreeNode<T> *> qu;

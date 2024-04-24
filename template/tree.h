@@ -20,4 +20,4 @@ template <class T>
 TreeNode<T> *buildPreMidTree(const vector<T> &pre_nums,
                              const vector<T> &mid_nums, int pre_left,
                              int pre_right, int mid_left, int mid_right);
-template <class T> TreeNode<T> *buildTree(const vector<T> &vv);
+template <class T> TreeNode<T> *buildTree(vector<T> vv);
