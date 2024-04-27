@@ -12,7 +12,7 @@ inline void printBool(bool t) {
     }
 }
 
-template <class T> void printVector(const vector<T> &nums) {
+template <class T> void printVector(const vector<T> nums) {
     ostringstream oss;
     for (auto &t : nums) {
         oss << t << ",";
@@ -24,7 +24,7 @@ template <class T> void printVector(const vector<T> &nums) {
     cout << res << endl;
 }
 
-template <class T> void printVectorVector(const vector<vector<T>> &nums) {
+template <class T> void printVectorVector(const vector<vector<T>> nums) {
     for (auto &t : nums) {
         printVector(t);
     }
