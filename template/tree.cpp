@@ -112,6 +112,9 @@ template <class T> TreeNode<T> *buildTree(vector<T> vv) {
         }
         j++;
 
+        if (j >= vv.size()) {
+            continue;
+        }
         if (vv[j] == INT_MIN) {
             top->right = nullptr;
         } else {
@@ -303,9 +306,9 @@ void testBuildTree() {
 }
 
 // int main(void) {
-    // testBuildPreMidTree();
-    // UnionFind ud(10);
-    // minimumTree();
+// testBuildPreMidTree();
+// UnionFind ud(10);
+// minimumTree();
 
-    // return 0;
+// return 0;
 // }
