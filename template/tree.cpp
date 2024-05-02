@@ -92,6 +92,9 @@ void testBuildPreMidTree() {
 }
 
 template <class T> TreeNode<T> *buildTree(vector<T> vv) {
+    if (vv.size() == 0) {
+        return nullptr;
+    }
     TreeNode<T> *root = new TreeNode<T>(vv[0]);
 
     queue<TreeNode<T> *> qu;
