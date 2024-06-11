@@ -2,22 +2,21 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-template <class T> struct TreeNode {
-    T val;
+struct TreeNode {
+    int val;
     TreeNode *left = nullptr;
     TreeNode *right = nullptr;
     TreeNode() : val(0) {}
-    TreeNode(T x) : val(x) {}
-    TreeNode(T x, TreeNode *left, TreeNode *right)
+    TreeNode(int x) : val(x) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right)
         : val(x), left(left), right(right) {}
 };
 
-template <class T> vector<T> preEnumTree(TreeNode<T> *root);
-template <class T> vector<T> midEnumTree(TreeNode<T> *root);
-template <class T> vector<T> tailEnumTree(TreeNode<T> *root);
+vector<int> preEnumTree(TreeNode *root);
+vector<int> midEnumTree(TreeNode *root);
+vector<int> tailEnumTree(TreeNode *root);
 
-template <class T>
-TreeNode<T> *buildPreMidTree(const vector<T> &pre_nums,
-                             const vector<T> &mid_nums, int pre_left,
-                             int pre_right, int mid_left, int mid_right);
-template <class T> TreeNode<T> *buildTree(vector<T> vv);
+TreeNode *buildPreMidTree(const vector<int> &pre_nums,
+                          const vector<int> &mid_nums, int pre_left,
+                          int pre_right, int mid_left, int mid_right);
+TreeNode *buildTree(vector<int> vv);

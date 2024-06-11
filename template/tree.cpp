@@ -2,10 +2,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-template <class T> vector<T> preEnumTree(TreeNode<T> *root) {
-    vector<T> res;
+vector<int> preEnumTree(TreeNode *root) {
+    vector<int> res;
 
-    function<void(TreeNode<T> *)> preOrder = [&](TreeNode<T> *root) {
+    function<void(TreeNode *)> preOrder = [&](TreeNode *root) {
         if (!root)
             return;
 
@@ -18,10 +18,10 @@ template <class T> vector<T> preEnumTree(TreeNode<T> *root) {
     return res;
 }
 
-template <class T> vector<T> midEnumTree(TreeNode<T> *root) {
-    vector<T> res;
+vector<int> midEnumTree(TreeNode *root) {
+    vector<int> res;
 
-    function<void(TreeNode<T> *)> midOrder = [&](TreeNode<T> *root) {
+    function<void(TreeNode *)> midOrder = [&](TreeNode *root) {
         if (!root)
             return;
 
@@ -34,10 +34,10 @@ template <class T> vector<T> midEnumTree(TreeNode<T> *root) {
     return res;
 }
 
-template <class T> vector<T> tailEnumTree(TreeNode<T> *root) {
-    vector<T> res;
+vector<int> tailEnumTree(TreeNode *root) {
+    vector<int> res;
 
-    function<void(TreeNode<T> *)> tailOrder = [&](TreeNode<T> *root) {
+    function<void(TreeNode *)> tailOrder = [&](TreeNode *root) {
         if (!root)
             return;
 
@@ -50,16 +50,15 @@ template <class T> vector<T> tailEnumTree(TreeNode<T> *root) {
     return res;
 }
 
-template <class T>
-TreeNode<T> *buildPreMidTree(const vector<T> &pre_nums,
-                             const vector<T> &mid_nums, int pre_left,
-                             int pre_right, int mid_left, int mid_right) {
+TreeNode *buildPreMidTree(const vector<int> &pre_nums,
+                          const vector<int> &mid_nums, int pre_left,
+                          int pre_right, int mid_left, int mid_right) {
     if (pre_left > pre_right) {
         return nullptr;
     }
 
-    T val = pre_nums[pre_left];
-    TreeNode<T> *root = new TreeNode<T>(val);
+    int val = pre_nums[pre_left];
+    TreeNode *root = new TreeNode(val);
 
     int mid_mid = INT_MIN;
     for (int i = mid_left; i <= mid_right; i++) {
@@ -83,26 +82,26 @@ void testBuildPreMidTree() {
     pre_nums = {1, 3, 6, 7};
     vector<int> mid_nums{4, 2, 5, 1, 6, 3, 7};
     mid_nums = {1, 6, 3, 7};
-    TreeNode<int> *root = buildPreMidTree(
-        pre_nums, mid_nums, 0, pre_nums.size() - 1, 0, mid_nums.size() - 1);
+    TreeNode *root = buildPreMidTree(pre_nums, mid_nums, 0, pre_nums.size() - 1,
+                                     0, mid_nums.size() - 1);
 
     printVector(preEnumTree(root));
     printVector(midEnumTree(root));
     printVector(tailEnumTree(root));
 }
 
-template <class T> TreeNode<T> *buildTree(vector<T> vv) {
+TreeNode *buildTree(vector<int> vv) {
     if (vv.size() == 0) {
         return nullptr;
     }
-    TreeNode<T> *root = new TreeNode<T>(vv[0]);
+    TreeNode *root = new TreeNode(vv[0]);
 
-    queue<TreeNode<T> *> qu;
+    queue<TreeNode *> qu;
     qu.push(root);
     int j = 1;
 
     while (!qu.empty()) {
-        TreeNode<T> *top = qu.front();
+        TreeNode *top = qu.front();
         qu.pop();
 
         if (j >= vv.size())
@@ -110,7 +109,7 @@ template <class T> TreeNode<T> *buildTree(vector<T> vv) {
         if (vv[j] == INT_MIN) {
             top->left = nullptr;
         } else {
-            top->left = new TreeNode<T>(vv[j]);
+            top->left = new TreeNode(vv[j]);
             qu.push(top->left);
         }
         j++;
@@ -121,7 +120,7 @@ template <class T> TreeNode<T> *buildTree(vector<T> vv) {
         if (vv[j] == INT_MIN) {
             top->right = nullptr;
         } else {
-            top->right = new TreeNode<T>(vv[j]);
+            top->right = new TreeNode(vv[j]);
             qu.push(top->right);
         }
         j++;
@@ -129,8 +128,7 @@ template <class T> TreeNode<T> *buildTree(vector<T> vv) {
     return root;
 }
 
-TreeNode<int> *lowestCommonAncestor(TreeNode<int> *root, TreeNode<int> *p,
-                                    TreeNode<int> *q) {
+TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q) {
     // 有一个是，就不向下找了；如果另一个也有，肯定是根，如果没有，就是当前子树
     if (!root || root == p || root == q) {
         return root;
