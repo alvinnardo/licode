@@ -12,10 +12,10 @@ inline void printBool(bool t) {
     }
 }
 
-template <class T> void printVector(const vector<T> nums) {
+template <class T> void printVector(const vector<T> nums, string delimiter = ",") {
     ostringstream oss;
     for (auto &t : nums) {
-        oss << t << ",";
+        oss << t << delimiter;
     }
     auto res = oss.str();
     if (!res.empty()) {
