@@ -101,7 +101,7 @@ void dijkstra() {
     while (!pq.empty()) {
         auto t = pq.top();
         pq.pop();
-        int d = t.first; // 注意前面是举例，后面是节点
+        int d = t.first; // 注意前面是距离，后面是节点
         int pn = t.second;
 
         // 避免重复遍历，dist 已经被改小了，之前大的值就不成立了
