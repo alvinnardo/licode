@@ -14,7 +14,7 @@ inline void printBool(bool t) {
 
 template <class T> void printVector(const vector<T> nums, string delimiter = ",") {
     ostringstream oss;
-    for (auto &t : nums) {
+    for (auto t : nums) {
         oss << t << delimiter;
     }
     auto res = oss.str();
@@ -25,7 +25,7 @@ template <class T> void printVector(const vector<T> nums, string delimiter = ","
 }
 
 template <class T> void printVectorVector(const vector<vector<T>> nums) {
-    for (auto &t : nums) {
+    for (auto t : nums) {
         printVector(t);
     }
 }
