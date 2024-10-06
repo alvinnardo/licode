@@ -3,6 +3,25 @@
 using namespace std;
 
 int canCompleteCircuit(vector<int> gas, vector<int> cost) {
+    // 题解：贪心
+    // 如果某一个加油站无法到达一个加油站，
+    // 那么这两个中间的加油站都不能到达该加油站
+    // 时间 O(n)，空间 O(1)
+    int sum = 0, dur = -1, res = -1, t = 0;
+    for (int i = 0; i < gas.size(); i++) {
+        if (dur < 0) {
+            dur = 0;
+            res = i;
+        }
+        t = gas[i] - cost[i];
+        dur += t;
+        sum += t;
+    }
+
+    return sum < 0 ? -1 : res;
+}
+
+int canCompleteCircuit1(vector<int> gas, vector<int> cost) {
     if (gas.size() == 1) {
         return gas[0] - cost[0] < 0 ? -1 : 0;
     }
