@@ -4,6 +4,15 @@
 #include <random>
 using namespace std;
 
+static bool has_srand = false;
+
+static void setSrand() {
+    if (!has_srand) {
+        has_srand = true;
+        srand(time(NULL));
+    }
+}
+
 inline void printBool(bool t) {
     if (t) {
         cout << "true" << endl;
@@ -12,7 +21,8 @@ inline void printBool(bool t) {
     }
 }
 
-template <class T> void printVector(const vector<T> nums, string delimiter = ",") {
+template <class T>
+void printVector(const vector<T> nums, string delimiter = ",") {
     ostringstream oss;
     for (auto t : nums) {
         oss << t << delimiter;
@@ -31,13 +41,12 @@ template <class T> void printVectorVector(const vector<vector<T>> nums) {
 }
 
 static int getRandom(int a, int b) {
-    srand(time(NULL));
-
+    setSrand();
     return (rand() % (b - a + 1)) + a;
 }
 
 static vector<int> getNRandom(int a, int b, int n, bool unique = false) {
-    srand(time(NULL));
+    setSrand();
 
     auto getRangeNum = [&]() { return (rand() % (b - a + 1)) + a; };
     if (unique && b - a + 1 <= n) {
