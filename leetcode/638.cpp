@@ -1,9 +1,66 @@
 #include "../template/head.h"
 #include <bits/stdc++.h>
 
-// 超时
 int shoppingOffers(vector<int> price, vector<vector<int>> special,
                    vector<int> needs) {
+    // 思路：DFS
+    // 时间 O(mnk)，空间 O(mnk)
+    int n = needs.size(), m = special.size();
+    int tot = INT_MAX;
+    // 这个优化从 3000ms 降到了 11ms
+    vector<int> special_pos; // 过滤掉不可能的礼包，比较礼包的价格和单买的价格
+    for (int i = 0; i < m; i++) {
+        int sum = 0;
+        for (int j = 0; j < n; j++) {
+            sum += special[i][j] * price[j];
+        }
+        if (special[i].back() < sum) {
+            special_pos.emplace_back(i);
+        }
+    }
+    m = special_pos.size();
+
+    // 对于每个礼包选择个数
+    function<void(int, int, vector<int>)> dfs = [&](int pos, int cur_tot,
+                                                    vector<int> rem) {
+        if (pos == m) { // 计算买剩余物品的价格
+            int t = 0;
+            for (int i = 0; i < n; i++) {
+                t += price[i] * rem[i];
+            }
+            tot = min(tot, t + cur_tot);
+            return;
+        }
+
+        dfs(pos + 1, cur_tot, rem); // 不选
+
+        bool can = true;
+        auto &rspecial = special[special_pos[pos]];
+        while (can) {
+            for (int i = 0; i < n; i++) {
+                if (rem[i] - rspecial[i] < 0) {
+                    can = false;
+                    break; // 不能买了
+                } else {
+                    rem[i] -= rspecial[i];
+                }
+            }
+
+            if (!can) {
+                break;
+            }
+            cur_tot += rspecial.back();
+            dfs(pos + 1, cur_tot, rem);
+        }
+    };
+
+    dfs(0, 0, needs);
+    return tot;
+}
+
+// 超时
+int shoppingOffers_timeout(vector<int> price, vector<vector<int>> special,
+                           vector<int> needs) {
     /* clang-format off */
     // 思路：DP + 哈希表，哈希表存放状态压缩值，将纵向多维转为横向多维
     // 转移方程为 f[a, b, c] = min(f[a, b, c], f[a - sp[0], b - sp[1], c - sp[2]] + sp[3])
