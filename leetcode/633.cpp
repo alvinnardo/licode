@@ -24,7 +24,7 @@ bool judgeSquareSum1(int c) {
     // 题解：枚举
     // 思路一样，判断的时候可以直接用 sqrt
     // 时间 O(√n)，空间 O(1)
-    for (int i = 0; i <= sqrt(c); i++) {
+    for (int i = 0; i <= sqrt(c); i++) { // 注意 0 也是，所以从 0 开始
 
         double b = sqrt(c - i * i);
         if (b == (int)b) { // 这里会将整形 b 转为 double 再比较
