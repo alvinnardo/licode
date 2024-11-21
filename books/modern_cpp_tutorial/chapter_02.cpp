@@ -1,3 +1,4 @@
+#include "chapter_02.h"
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -137,6 +138,25 @@ int main(void) {
        template<class T, class U> class Magic {};
        using Magic2 = Magic<std::vector<T>, std::string>;
     */
+
+    Paragraph("2.5.4 变长参数模板");
+    coutValue(1, 2, "123");
+    coutValue2(3, 4, "345");
+    coutValue3(5, 6, "567");
+
+    Paragraph("2.5.5. 折叠表达式");
+    cout << sum(1, 2, 3, 4, 5, 6, 7, 8, 9, 10) << endl;
+
+    Paragraph("2.5.6 非类型模板");
+    // array 的模板就是这样的
+    cout << nSum<int, 10>(5) << endl;
+    // 编译期生成结果
+    cout << doubleSum<10>() << endl;
+
+    Paragraph("2.6 面向对象");
+    Paragraph("2.6.1 委托构造");
+    shared_ptr<Base> base_str = make_shared<Base>(20);
+    base_str->printVal();
 
     return 0;
 }
