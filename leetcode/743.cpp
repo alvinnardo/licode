@@ -2,8 +2,9 @@
 #include <bits/stdc++.h>
 
 int networkDelayTime(vector<vector<int>> times, int n, int k) {
-    // 思路：DFS 单源有权最短路径
-    // 时间: O(eloge)，空间 O(e)
+    // 思路：dijkstra
+    // 单源有权有向最短路，贪心思想
+    // 时间 O(mlogm)，空间 O(m + n)
     vector<vector<pair<int, int>>> edges(n + 1);
     vector<int> dist(n + 1, INT_MAX);
     for (auto &t : times) {
@@ -17,9 +18,7 @@ int networkDelayTime(vector<vector<int>> times, int n, int k) {
     pq.emplace(0, k);
 
     while (!pq.empty()) {
-        auto &t = pq.top();
-        auto d = t.first;
-        auto node = t.second;
+        auto [d, node] = pq.top();
         pq.pop();
 
         if (d > dist[node]) {
@@ -33,17 +32,25 @@ int networkDelayTime(vector<vector<int>> times, int n, int k) {
                 pq.emplace(newd, e.first);
             }
         }
+
+        // 用是否已经计算过进行判断
+        /*
+        if (dist[node] != INT_MAX) { // 已经到达了该点
+            continue;
+        }
+
+        dist[node] = dt;
+        for (const auto &it : edges[node]) {
+            if (dist[it.second] == INT_MAX) { // 如果没有被访问过
+                // 更新到各点的距离
+                pq.emplace(dt + it.first, it.second);
+            }
+        }
+        */
     }
 
-    int maxv = INT_MIN;
-    for (int i = 1; i < dist.size(); i++) {
-        if (dist[i] == INT_MAX) {
-            return -1;
-        } else if (dist[i] > maxv) {
-            maxv = dist[i];
-        }
-    }
-    return maxv;
+    int maxv = *max_element(dist.begin() + 1, dist.end());
+    return maxv == INT_MAX ? -1 : maxv;
 }
 
 int main(int argc, char *argv[]) {
