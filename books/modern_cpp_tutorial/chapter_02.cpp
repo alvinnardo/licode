@@ -65,6 +65,9 @@ int main(void) {
        Foo foo = {1, 2};
        C++11 提供统一的语法来初始化任意对象，如 Foo foo {1, 2};
      */
+    InitList ilist({1, 2, 3, 4, 5});
+    InitList ilist2 = {1, 2, 3, 4, 5};
+    InitList ilist3{1, 2, 3, 4, 5};
 
     Paragraph("2.2.3 结构化绑定");
     // 2.2.2 是用于初始化，2.2.3 用于返回值
@@ -155,8 +158,38 @@ int main(void) {
 
     Paragraph("2.6 面向对象");
     Paragraph("2.6.1 委托构造");
-    shared_ptr<Base> base_str = make_shared<Base>(20);
-    base_str->printVal();
+    shared_ptr<Base> base_ptr = make_shared<Base>(20);
+    base_ptr->printVal1();
+    base_ptr->printVal2();
+
+    Paragraph("2.6.2 继承构造");
+    shared_ptr<Subclass> base_ptr2 = make_shared<Subclass>(20);
+    base_ptr2->printVal1();
+    base_ptr2->printVal2();
+
+    Paragraph("2.6.3 显式虚函数重载");
+    // 本质上是要显示标注各虚函数的关系
+    // 在编程过程中，由于套了很多层，
+    // 在子类中，不想覆盖虚函数时写了一个重名的方法
+    // 在父类中，删除了虚函数的接口
+    // 所以引入 virtual override final
+
+    Paragraph("2.6.4 显式禁用默认函数");
+    shared_ptr<Test> test_ptr = make_shared<Test>();
+    cout << test_ptr->val << endl;
+
+    Paragraph("2.6.5 强枚举类型");
+    // 传统 C++ 不同枚举类型都是整数，且同命名空间下枚举名不能相同
+    // 使用枚举类进行声明
+
+    // 同一作用域下可以进行枚举值比较
+    if (new_enum::val3 == new_enum::val4) {
+        cout << "enum true" << endl;
+    }
+
+    // 使用值时需要强转
+    cout << (int)new_enum2::VAL3 << endl;
+    cout << new_enum2::VAL4 << endl; // 重载 << 后可以不用强转
 
     return 0;
 }
