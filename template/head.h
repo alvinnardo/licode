@@ -1,5 +1,6 @@
 #pragma once
 #include "tree.h"
+#include "list.h"
 #include <bits/stdc++.h>
 #include <random>
 using namespace std;
