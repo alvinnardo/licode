@@ -18,6 +18,8 @@ bool search(vector<int> nums, int target) {
                                            // nums[r], mid 点只有两种情况，1
                                            // 是单个非递减图，2
                                            // 是两个非递减图，在左边部分上
+            // 左半部分肯定是大于等于右半部分的
+            // 如果左小于中，则肯定是在递增区间上
             if (target >= nums[l] && target < nums[mid]) {
                 r = mid - 1;
             } else {
@@ -34,6 +36,32 @@ bool search(vector<int> nums, int target) {
     return false;
 }
 
+bool search_review(vector<int> nums, int target) {
+    // 思路：二分
+    // 硬找
+    // 时间 O(logn)，空间 O(logn)
+
+    function<bool(int, int)> dfs = [&](int bng, int end) -> bool {
+        if (bng > end) {
+            return false;
+        }
+
+        if (bng == end) {
+            return nums[bng] == target;
+        }
+
+        int mid = bng + ((end - bng) >> 1);
+        if (nums[mid] == target) {
+            return true;
+        }
+
+        return dfs(bng, mid - 1) || dfs(mid + 1, end);
+    };
+
+    return dfs(0, nums.size() - 1);
+}
+
+// 现在看之前写的算法太菜了
 bool search_bad(vector<int> nums, int target) {
     // 找到突变点
     // 前后二分
