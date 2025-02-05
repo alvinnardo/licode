@@ -2,6 +2,69 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+vector<vector<int>> subsetsWithDup_review_1(vector<int> nums) {
+    // 思路：回溯
+    // 选或不选:
+    //     1. 先排序
+    //     2. 如果当前数字和上一个数字一样，且上一个数字没有选，则当前数字不能选
+    //        因为有一种上一个数字选中的情况
+    // 时间 O(2^n)，空间 O(n)，栈的空间，保存结果的不算
+
+    vector<vector<int>> res;
+    vector<int> tmp;
+
+    sort(nums.begin(), nums.end());
+    function<void(int, bool)> dfs = [&](int pos, bool choose) {
+        if (pos == nums.size()) {
+            res.emplace_back(tmp);
+            return;
+        }
+
+        dfs(pos + 1, false);
+        if (!(pos > 0 && !choose && nums[pos] == nums[pos - 1])) {
+            tmp.emplace_back(nums[pos]);
+            dfs(pos + 1, true);
+            tmp.pop_back();
+        }
+    };
+
+    dfs(0, false);
+    return res;
+}
+
+vector<vector<int>> subsetsWithDup_review_2(vector<int> nums) {
+    // 思路：回溯
+    // 枚举选哪一个，见 40 题解法
+    //     1. 排序
+    //     2. 每一层选一个数字，如果当前层后续数字重复则不选
+    //        主要是判断每一层(pos > i), 重复的数字 (后 == 前)
+    // 时间 O(2^n)，空间 O(n)，栈的空间，保存结果的不算
+
+    vector<vector<int>> res;
+    vector<int> tmp;
+
+    sort(nums.begin(), nums.end());
+    function<void(int)> dfs = [&](int pos) {
+        res.emplace_back(tmp);
+
+        // 每次进入循环就是一层
+        for (int i = pos; i < nums.size(); i++) {
+            // 每一层选一个数，如果重复就不选
+            // 在每一层中，判断是否重复从 pos >= i + 1 开始
+            if (i > pos && nums[i] == nums[i - 1]) {
+                continue;
+            }
+
+            tmp.push_back(nums[i]);
+            dfs(i + 1);
+            tmp.pop_back();
+        }
+    };
+
+    dfs(0);
+    return res;
+}
+
 vector<vector<int>> subsetsWithDup(vector<int> nums) {
     // 如果当前的数字和之前的数字相同，且前面的数字没有被选择时，
     // 再选择当前的数字就会重复
@@ -24,6 +87,7 @@ vector<vector<int>> subsetsWithDup(vector<int> nums) {
         dfs(pos + 1);
         each.pop_back();
 
+        // 一旦不选，则相同的数字都不选
         while (pos + 1 < nums.size() && nums[pos + 1] == nums[pos]) {
             pos++;
         }
