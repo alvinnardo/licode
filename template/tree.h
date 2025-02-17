@@ -15,6 +15,7 @@ struct TreeNode {
 vector<int> preEnumTree(TreeNode *root);
 vector<int> midEnumTree(TreeNode *root);
 vector<int> tailEnumTree(TreeNode *root);
+vector<int> levelEnumTree(TreeNode *root);
 
 TreeNode *buildPreMidTree(const vector<int> &pre_nums,
                           const vector<int> &mid_nums, int pre_left,

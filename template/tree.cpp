@@ -50,6 +50,39 @@ vector<int> tailEnumTree(TreeNode *root) {
     return res;
 }
 
+vector<int> levelEnumTree(TreeNode *root) {
+    vector<int> res;
+    queue<TreeNode *> qu;
+    qu.emplace(root);
+
+    while (!qu.empty()) {
+        TreeNode *t = qu.front();
+        qu.pop();
+        res.emplace_back(t->val);
+
+        if (t->val == INT_MIN) {
+            continue;
+        }
+
+        if (t->left) {
+            qu.emplace(t->left);
+        } else {
+            qu.emplace(new TreeNode(INT_MIN));
+        }
+
+        if (t->right) {
+            qu.emplace(t->right);
+        } else {
+            qu.emplace(new TreeNode(INT_MIN));
+        }
+    }
+
+    while (res.back() == INT_MIN) {
+        res.pop_back();
+    }
+    return res;
+};
+
 TreeNode *buildPreMidTree(const vector<int> &pre_nums,
                           const vector<int> &mid_nums, int pre_left,
                           int pre_right, int mid_left, int mid_right) {
