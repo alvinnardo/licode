@@ -1,6 +1,6 @@
 #pragma once
-#include "tree.h"
 #include "list.h"
+#include "tree.h"
 #include <bits/stdc++.h>
 #include <random>
 using namespace std;
@@ -35,10 +35,31 @@ void printVector(const vector<T> nums, string delimiter = ",") {
     cout << res << endl;
 }
 
-template <class T> void printVectorVector(const vector<vector<T>> nums) {
-    for (auto t : nums) {
-        printVector(t);
+template <class T>
+void printVectorVector(const vector<vector<T>> nums_vv,
+                       const std::string &delimiter = ",") {
+    if (nums_vv.empty()) {
+        cout << "[]" << endl;
     }
+    ostringstream oss, oss_line;
+    oss << "[";
+    for (int i = 0; i < nums_vv.size(); i++) {
+        const auto &nums_v = nums_vv[i];
+        oss << "[";
+        for (int j = 0; j < nums_v.size(); j++) {
+            oss << nums_v[j];
+            if (j != nums_v.size() - 1) {
+                oss << delimiter;
+            }
+        }
+        oss << "]";
+        if (i != nums_vv.size() - 1) {
+            oss << ",";
+        }
+    }
+    oss << "]";
+
+    cout << oss.str() << endl;
 }
 
 static int getRandom(int a, int b) {
