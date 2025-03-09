@@ -1,4 +1,3 @@
-#pragma once
 #include "list.h"
 
 ListNode *buildList(const vector<int> &vv) {
