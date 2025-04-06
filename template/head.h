@@ -71,8 +71,8 @@ static vector<int> getNRandom(int a, int b, int n, bool unique = false) {
     setSrand();
 
     auto getRangeNum = [&]() { return (rand() % (b - a + 1)) + a; };
-    if (unique && b - a + 1 <= n) {
-        cout << "range larger than n in unique mode" << endl;
+    if (unique && b - a + 1 < n) {
+        cout << "range must be not less than n in unique mode" << endl;
         return {};
     }
 
