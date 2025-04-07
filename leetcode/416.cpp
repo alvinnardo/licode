@@ -47,6 +47,10 @@ bool canPartition_my(vector<int> nums) {
     // 2. 变形的 0-1 背包问题，重量和价值相等，判断能否得到 tot / 2即可
     // 注意：如果是偶数不一定能够平分如: 4 4 4
 
+    // 2025-04-07 思维固化了，没有往背包问题上想，一直想状压 DP 怎么做
+    // 思路：DP
+    // 时间 O(mn)，空间 O(mn)，m 是总和，n 是个数
+
     int sum = accumulate(nums.begin(), nums.end(), 0);
     if (sum & 1) {
         return false;
