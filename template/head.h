@@ -25,14 +25,20 @@ inline void printBool(bool t) {
 template <class T>
 void printVector(const vector<T> nums, string delimiter = ",") {
     ostringstream oss;
+    bool is_string = is_same<T, std::string>::value;
+
     for (auto t : nums) {
-        oss << t << delimiter;
+        if (is_string) {
+            oss << "\"" << t << "\"" << delimiter;
+        } else {
+            oss << t << delimiter;
+        }
     }
     auto res = oss.str();
     if (!res.empty()) {
         res.pop_back();
     }
-    cout << res << endl;
+    cout << "[" << res << "]" << endl;
 }
 
 template <class T>
