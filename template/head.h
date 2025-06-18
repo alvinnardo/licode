@@ -46,6 +46,7 @@ void printVectorVector(const vector<vector<T>> nums_vv,
                        const std::string &delimiter = ",") {
     if (nums_vv.empty()) {
         cout << "[]" << endl;
+        return;
     }
     ostringstream oss, oss_line;
     oss << "[";
