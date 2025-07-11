@@ -69,13 +69,12 @@ void printVectorVector(const vector<vector<T>> nums_vv,
     cout << oss.str() << endl;
 }
 
-using ll = long long;
-static ll getRandom(ll a, ll b) {
+static int getRandom(int a, int b) {
     setSrand();
     return (rand() % (b - a + 1)) + a;
 }
 
-static vector<ll> getNRandom(ll a, ll b, int n, bool unique = false) {
+static vector<int> getNRandom(int a, int b, int n, bool unique = false) {
     setSrand();
 
     auto getRangeNum = [&]() { return (rand() % (b - a + 1)) + a; };
@@ -84,10 +83,10 @@ static vector<ll> getNRandom(ll a, ll b, int n, bool unique = false) {
         return {};
     }
 
-    vector<ll> res;
-    unordered_set<ll> uset;
+    vector<int> res;
+    unordered_set<int> uset;
     for (int i = 0; i < n; i++) {
-        ll t = getRangeNum();
+        int t = getRangeNum();
         if (unique) {
             while (uset.find(t) != uset.end()) {
                 t = getRangeNum();
