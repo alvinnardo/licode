@@ -225,7 +225,7 @@ void std_sort(vector<int> vv) {
 
 // 从后面选择一个最小的
 // O(n2)
-void selection_sort(vector<int> vv) {
+void selection_sort1(vector<int> vv) {
     cout << "=== Selection Sort ===" << endl;
     int sz = vv.size();
     for (int i = 0; i < sz; i++) {
@@ -243,6 +243,19 @@ void selection_sort(vector<int> vv) {
         vv[i] = minv;
     }
     printVector(vv);
+}
+
+// example from std::iter_swap
+template <class ForwardIt> void selection_sort(ForwardIt begin, ForwardIt end) {
+    for (ForwardIt it = begin; it != end; ++it) {
+        std::iter_swap(it, std::min_element(it, end));
+    }
+}
+
+void selection_sort(vector<int> vv) {
+    cout << "=== Selection Sort ===" << endl;
+    selection_sort(vv.begin(), vv.end());
+    cout << vv << endl;
 }
 
 // 需要有范围

@@ -23,6 +23,22 @@ inline void printBool(bool t) {
 }
 
 template <class T>
+std::ostream &operator<<(std::ostream &oss, const vector<T> vec) {
+    if (vec.empty()) {
+        oss << "[]";
+        return oss;
+    }
+
+    bool is_string = is_same<T, std::string>::value;
+    oss << "[";
+    for (auto count{vec.size()}; auto e : vec) {
+        oss << (is_string ? "\"" : "") << e << (is_string ? "\"" : "")
+            << (--count ? "," : "]");
+    }
+    return oss;
+}
+
+template <class T>
 void printVector(const vector<T> nums, string delimiter = ",") {
     ostringstream oss;
     bool is_string = is_same<T, std::string>::value;
@@ -42,16 +58,15 @@ void printVector(const vector<T> nums, string delimiter = ",") {
 }
 
 template <class T>
-void printVectorVector(const vector<vector<T>> nums_vv,
-                       const std::string &delimiter = ",") {
-    if (nums_vv.empty()) {
-        cout << "[]" << endl;
-        return;
+std::string printVectorVectorHelp(const vector<vector<T>> vvec,
+                                  const std::string &delimiter = ",") {
+    if (vvec.empty()) {
+        return "[]";
     }
     ostringstream oss, oss_line;
     oss << "[";
-    for (int i = 0; i < nums_vv.size(); i++) {
-        const auto &nums_v = nums_vv[i];
+    for (int i = 0; i < vvec.size(); i++) {
+        const auto &nums_v = vvec[i];
         oss << "[";
         for (int j = 0; j < nums_v.size(); j++) {
             oss << nums_v[j];
@@ -60,19 +75,38 @@ void printVectorVector(const vector<vector<T>> nums_vv,
             }
         }
         oss << "]";
-        if (i != nums_vv.size() - 1) {
+        if (i != vvec.size() - 1) {
             oss << ",";
         }
     }
     oss << "]";
+    return oss.str();
+}
 
-    cout << oss.str() << endl;
+template <class T>
+std::ostream &operator<<(std::ostream &oss, std::vector<std::vector<T>> vvec) {
+    oss << printVectorVectorHelp(vvec);
+    return oss;
+}
+
+template <class T>
+void printVectorVector(const vector<vector<T>> vvec,
+                       const std::string &delimiter = ",") {
+    cout << printVectorVectorHelp(vvec, delimiter) << endl;
 }
 
 static int getRandom(int a, int b) {
-    setSrand();
-    return (rand() % (b - a + 1)) + a;
+    // setSrand();
+    // return (rand() % (b - a + 1)) + a;
+
+    static std::uniform_int_distribution dist(a, b);
+    static std::mt19937 gen(std::random_device{}());
+    return dist(gen);
 }
+
+// example from std::iter_swap in cppreference
+// interface here, main code in getRandom()
+template <int min, int max> int rand_int() { return getRandom(min, max); }
 
 static vector<int> getNRandom(int a, int b, int n, bool unique = false) {
     setSrand();
