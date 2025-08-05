@@ -5,42 +5,56 @@ using namespace std;
 
 // 归并排序
 // 常用于外排，数据量大，不能一次完全读入内存
+void merge_sort_helper(vector<int>::iterator bng, vector<int>::iterator end) {
+
+    if (end - bng > 1) {
+        auto mid = bng + ((end - bng) >> 1);
+        merge_sort_helper(bng, mid);
+        merge_sort_helper(mid, end);
+        std::inplace_merge(bng, mid, end);
+    }
+}
+
 void merge_sort(vector<int> vv) {
     cout << "=== Merge Sort ===" << endl;
-    int sz = vv.size();
+    // int sz = vv.size();
+    //
+    // function<void(int, int)> dfs = [&](int left, int right) {
+    //     if (left >= right) {
+    //         return;
+    //     }
+    //
+    //     int mid = left + (right - left) / 2;
+    //     dfs(left, mid);
+    //     dfs(mid + 1, right);
+    //
+    //     vector<int> tmp(right - left + 1);
+    //     int p = left, q = mid + 1, i = 0;
+    //     while (p <= mid || q <= right) {
+    //         if (p <= mid && q <= right) {
+    //             if (vv[p] < vv[q]) {
+    //                 tmp[i++] = vv[p++];
+    //             } else {
+    //                 tmp[i++] = vv[q++];
+    //             }
+    //         } else if (p <= mid) {
+    //             tmp[i++] = vv[p++];
+    //         } else {
+    //             tmp[i++] = vv[q++];
+    //         }
+    //     }
+    //
+    //     for (int t = 0; t < tmp.size(); t++) {
+    //         vv[left + t] = tmp[t];
+    //     }
+    // };
+    //
+    // dfs(0, sz - 1);
+    // printVector(vv);
 
-    function<void(int, int)> dfs = [&](int left, int right) {
-        if (left >= right) {
-            return;
-        }
-
-        int mid = left + (right - left) / 2;
-        dfs(left, mid);
-        dfs(mid + 1, right);
-
-        vector<int> tmp(right - left + 1);
-        int p = left, q = mid + 1, i = 0;
-        while (p <= mid || q <= right) {
-            if (p <= mid && q <= right) {
-                if (vv[p] < vv[q]) {
-                    tmp[i++] = vv[p++];
-                } else {
-                    tmp[i++] = vv[q++];
-                }
-            } else if (p <= mid) {
-                tmp[i++] = vv[p++];
-            } else {
-                tmp[i++] = vv[q++];
-            }
-        }
-
-        for (int t = 0; t < tmp.size(); t++) {
-            vv[left + t] = tmp[t];
-        }
-    };
-
-    dfs(0, sz - 1);
-    printVector(vv);
+    // inplace merge sort
+    merge_sort_helper(vv.begin(), vv.end());
+    cout << vv << endl;
 }
 
 // 挖坑快排
@@ -85,6 +99,34 @@ void quick_sort(vector<int> vv) {
 
     dfs(0, sz - 1);
     printVector(vv);
+}
+
+// from std::partition
+void quick_sort_helper(vector<int>::iterator bng, vector<int>::iterator end) {
+    if (bng == end) {
+        return;
+    }
+
+    auto pivot = *std::next(bng, std::distance(bng, end) >> 1);
+    // 在 mid1 处分开，mid1 指向第一个不满足小于的
+    auto mid1 = std::partition(bng, end,
+                               [pivot](const auto &em) { return em < pivot; });
+
+    // 在 mid2 处分开，mid2 指向第一个不满足小于等于的
+    auto mid2 = std::partition(mid1, end,
+                               [pivot](const auto &em) { return em <= pivot; });
+
+    // [mid1, mid2) 之间都是等于 pivot 的
+    quick_sort_helper(bng, mid1);
+    quick_sort_helper(mid2, end);
+}
+
+void quick_sort2(vector<int> vec) {
+    cout << "=== Quick sort with partition ===" << endl;
+
+    // simplify by using stl
+    quick_sort_helper(vec.begin(), vec.end());
+    cout << vec << endl;
 }
 
 // 插入排序
@@ -199,6 +241,27 @@ void heap_sort(vector<int> vv) {
     }
 
     printVector(vv);
+}
+
+// from sort_heap
+void heap_sort_helper(vector<int>::iterator bng, vector<int>::iterator end) {
+    while (bng != end) {
+        std::ranges::pop_heap(bng, end--);
+    }
+}
+
+void heap_sort2(vector<int> vec) {
+    cout << "=== Heap Sort with stl ===" << endl;
+
+    std::ranges::make_heap(vec.begin(), vec.end());
+
+    // std::sort_heap 展开
+    heap_sort_helper(vec.begin(), vec.end());
+
+    // 直接调用
+    std::ranges::sort_heap(vec.begin(), vec.end());
+
+    cout << vec << endl;
 }
 
 // STL 中的 std::sort() 并不全是快排
@@ -377,7 +440,9 @@ int main(void) {
     heal_sort(vv);
     merge_sort(vv);
     quick_sort(vv);
+    quick_sort2(vv);
     heap_sort(vv);
+    heap_sort2(vv);
 
     // 以下三种思想类似，不是两两比较，而是先用一个范围包住
     counting_sort(vv);
