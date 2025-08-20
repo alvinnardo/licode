@@ -99,8 +99,8 @@ static int getRandom(int a, int b) {
     // setSrand();
     // return (rand() % (b - a + 1)) + a;
 
-    static std::uniform_int_distribution dist(a, b);
-    static std::mt19937 gen(std::random_device{}());
+    std::uniform_int_distribution dist(a, b);
+    std::mt19937 gen(std::random_device{}());
     return dist(gen);
 }
 
