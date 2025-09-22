@@ -3,3 +3,4 @@
 - 《深入理解计算机系统》
 - 《xiaolincoding.com》
 - 《现代 C++ 教程》
+- 《Head First 设计模式》
