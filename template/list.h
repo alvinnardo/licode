@@ -10,3 +10,4 @@ struct ListNode {
 };
 
 ListNode *buildList(const vector<int> &vv);
+void printList(ListNode *head);

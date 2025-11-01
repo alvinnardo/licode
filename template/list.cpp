@@ -14,3 +14,14 @@ ListNode *buildList(const vector<int> &vv) {
 
     return head;
 }
+
+void printList(ListNode *head) {
+    int cnt{};
+    for (ListNode *p = head; p != nullptr; p = p->next, cnt++) {
+        if (cnt > 0) {
+            cout << "->";
+        }
+        cout << p->val;
+    }
+    cout << endl;
+}
