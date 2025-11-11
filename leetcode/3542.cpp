@@ -2,6 +2,38 @@
 #include <bits/stdc++.h>
 
 int minOperations(vector<int> &&nums) {
+    // 题解：单调栈
+    // 时间 O(n)，空间 O(n)
+
+    // 这个思路比较难想
+    // 延迟删除的思想，单调栈中从小到大放置，表示延迟删除
+    // 当遇到更小的表示大的需要删除，小的还是处于延迟删除状态
+    // 且删除后，就是有一个 0 分割，后面更大的可以直接加入栈中
+
+    // 如果数字是 0，那么表示分割，清空即可
+    int res{};
+
+    vector<int> vec; // 模拟栈
+    for (int num : nums) {
+        if (num == 0) {
+            res += vec.size();
+            vec.clear();
+            continue;
+        }
+
+        while (!vec.empty() && num < vec.back()) {
+            res++;
+            vec.pop_back();
+        }
+
+        if (vec.empty() || num > vec.back()) {
+            vec.push_back(num);
+        }
+    }
+
+    return res + vec.size();
+}
+int minOperations1(vector<int> &&nums) {
     // 思路：优先队列 + 红黑树
     // 时间 O(nlogn)，空间 O(n)
 
