@@ -94,7 +94,7 @@ class ThreadPool {
   public:
     explicit ThreadPool(int num_threads) {
         for (size_t i = 0; i < num_threads; ++i) {
-            m_workers.emplace_back([this] -> void { Worker(); });
+            m_workers.emplace_back([this]() -> void { Worker(); });
         }
     }
 
@@ -110,8 +110,7 @@ class ThreadPool {
     template <typename F, typename... Args> void Post(F &&f, Args &&...args) {
         // std::bind 的结果统一为 std::function<void> 类型，
         // 可以放在同一类型的队列中
-        auto task =
-            std::bind(std::forward<F>(f), std::forward<Args...>(args)...);
+        auto task = std::bind(std::forward<F>(f), std::forward<Args>(args)...);
         m_task_queue.Push(task);
     }
 
@@ -132,7 +131,14 @@ class ThreadPool {
 };
 
 int main(void) {
-    //
+    auto func = [](int a, int b, int c) {
+        cout << "a: " << a << ", b: " << b << ", c: " << c << endl;
+    };
+
+    ThreadPool pool(20);
+    for (int i = 0; i < 10; ++i) {
+        pool.Post(func, i, i + 1, i + 2);
+    }
 
     return 0;
 }
