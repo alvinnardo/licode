@@ -22,8 +22,8 @@ void lambda_test_func() {
     std::function<void(int)> fun2 = [](int val) { cout << val << endl; };
     std::function<void(int)> fun3 = outer_func;
 
-    test_func(fun); // fun 编译为函数指针
-    fun2(3);        // fun2 和 fun3 显示类型，不能使用 test_func
+    test_func(fun);  // fun 编译为函数指针
+    fun2(3);         // fun2 和 fun3 显示类型，不能使用 test_func
     fun3(3);
 }
 
@@ -44,28 +44,33 @@ void test_literal() {
     // "01234" 包括一个 \0 结束符，总共 6 个字符
     static_assert(std::is_same<decltype("01234"), const char(&)[6]>::value, "");
 
-    const char(&left)[6] = "01234"; // 左值引用
+    const char(&left)[6] = "01234";  // 左值引用
     // const char (&&right)[6] = "01234"; // 右值引用错误
 }
 
 // 3.3.2
-template <typename T> void reference(T &) { cout << "lvalue" << endl; }
+template <typename T>
+void reference(T &) {
+    cout << "lvalue" << endl;
+}
 
-template <typename T> void reference(T &&) { cout << "rvalue" << endl; }
+template <typename T>
+void reference(T &&) {
+    cout << "rvalue" << endl;
+}
 void test_rvalue() {
-
-    string lv1 = "string."; // lv1 是左值
+    string lv1 = "string.";  // lv1 是左值
 
     // string &&rv1 = lv1; // 右值引用不能引用左值
-    string &&rv1 = std::move(lv1); // move 将左值转为右值
+    string &&rv1 = std::move(lv1);  // move 将左值转为右值
     cout << rv1 << endl;
 
     // string &lv2 = lv1 + lv1; // 非常量左值引用不能引用右值
-    const string &lv2 = lv1 + lv1; // 常量左值引用延长临时变量生命周期
+    const string &lv2 = lv1 + lv1;  // 常量左值引用延长临时变量生命周期
     cout << lv2 << endl;
 
-    string &&rv2 = lv1 + lv2; // 右值引用延长临时对象生命周期
-    rv2 += "Test";            // 非常量引用能够修改临时变量
+    string &&rv2 = lv1 + lv2;  // 右值引用延长临时对象生命周期
+    rv2 += "Test";             // 非常量引用能够修改临时变量
     cout << rv2 << endl;
 
     // 输出左值，rv2 是一个引用（不管左值引用还是右值引用），所以还是左值
@@ -93,15 +98,14 @@ struct A {
 
 A return_rvalue(bool test) {
     A a, b;
-    if (test)
-        return a;
-    return b; // 等价于 static_cast<A&&>(b)
+    if (test) return a;
+    return b;  // 等价于 static_cast<A&&>(b)
 
     // return test ? a : b; // 测试用三元表达式是拷贝构造
 }
 
 void test_return_rvalue() {
-    A obj = return_rvalue(false); // 用将亡值进行移动语义
+    A obj = return_rvalue(false);  // 用将亡值进行移动语义
     cout << "obj: " << endl;
     cout << obj.pointer << endl;
     cout << *obj.pointer << endl;
@@ -111,11 +115,11 @@ void test_vector() {
     string str = "hello";
     vector<string> vec;
 
-    vec.push_back(str);  // 拷贝构造
-    cout << str << endl; // hello
+    vec.push_back(str);   // 拷贝构造
+    cout << str << endl;  // hello
 
-    vec.push_back(std::move(str)); // 移动构造
-    cout << str << endl;           // 空
+    vec.push_back(std::move(str));  // 移动构造
+    cout << str << endl;            // 空
 }
 
 // 3.3.4
@@ -133,12 +137,13 @@ void test_vector() {
 //     reference(v);
 // }
 
-template <typename T> void pass(T &&v) {
+template <typename T>
+void pass(T &&v) {
     cout << "   普通传参：";
-    reference(v); // v 是左值
+    reference(v);  // v 是左值
 
     cout << "   move 传参：";
-    reference(std::move(v)); // 左值转右值
+    reference(std::move(v));  // 左值转右值
 
     cout << "   forward 传参：";
     reference(std::forward<T>(v));
@@ -150,9 +155,9 @@ template <typename T> void pass(T &&v) {
 
 void test_pass() {
     cout << "传右值：" << endl;
-    pass(1); // 传右值，输出左值
+    pass(1);  // 传右值，输出左值
 
     cout << "传左值：" << endl;
     int lval = 1;
-    pass(lval); // 传左值，输出左值
+    pass(lval);  // 传左值，输出左值
 }

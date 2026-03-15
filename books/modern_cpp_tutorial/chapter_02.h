@@ -3,7 +3,7 @@ using namespace std;
 
 // 2.2.2
 class InitList {
-  public:
+   public:
     vector<int> vec;
     InitList(initializer_list<int> list) {
         for (auto it = list.begin(); it != list.end(); ++it) {
@@ -13,39 +13,48 @@ class InitList {
 };
 
 // 2.5.4
-// 1. 边长参数模板
-template <typename... Args> class Magic1 {};
+// 1. 变长参数模板
+template <typename... Args>
+class Magic1 {};
 
 // 任意个数，包括 0 个
 class Magic1<> darkMagic;
 class Magic1<int, vector<int>, map<string, int>> darkMagic2;
 
 // 2. 不想要 0 个的
-template <typename Require, typename... Args> class Magic2 {};
+template <typename Require, typename... Args>
+class Magic2 {};
 // class Magic2<> darkMagic3; // 不支持 0 个
 
 // 3. 函数参数也支持变长参数
-template <typename... Args> void printf(const string &str, Args... args);
+template <typename... Args>
+void printf(const string &str, Args... args);
 
 // 4. 对参数进行解包
 // 4.1 获得个数
-template <typename... Args> void coutNum(Args... args) {
+template <typename... Args>
+void coutNum(Args... args) {
     cout << sizeof...(args) << endl;
 }
 
 // 4.2 递归解包
-template <typename T> void coutValue(T value) { cout << value << endl; }
+template <typename T>
+void coutValue(T value) {
+    cout << value << endl;
+}
 
 // 递归模板遍历所有值
 // 如果没有处理一个参数的模板，则尾递归到没有参数的模板，就会报错
 // 必须定义一个终止递归的函数
-template <typename T, typename... Args> void coutValue(T value, Args... args) {
+template <typename T, typename... Args>
+void coutValue(T value, Args... args) {
     cout << value << endl;
-    coutValue(args...); // 到最后一个值处理后，又递归调用 coutValue() 无参数
+    coutValue(args...);  // 到最后一个值处理后，又递归调用 coutValue() 无参数
 }
 
 // 4.3 C++17 支持变参模板解包功能
-template <typename T, typename... Args> void coutValue2(T value, Args... args) {
+template <typename T, typename... Args>
+void coutValue2(T value, Args... args) {
     cout << value << endl;
     // 主要解决 0 参数递归的问题
     // constexpr 表示在编译阶段判断
@@ -55,7 +64,8 @@ template <typename T, typename... Args> void coutValue2(T value, Args... args) {
 }
 
 // 4.4 使用初始化列表解包
-template <typename T, typename... Args> void coutValue3(T value, Args... args) {
+template <typename T, typename... Args>
+void coutValue3(T value, Args... args) {
     cout << value << endl;
     // 这里包含一个匿名函数，auto fun = [&args] () { cout << args << endl; }
     // 然后执行这个匿名函数
@@ -66,20 +76,29 @@ template <typename T, typename... Args> void coutValue3(T value, Args... args) {
 // ======
 // 2.5.5
 // C++17 表达式支持变长参数: t + ...
-template <typename... T> auto sum(T... t) { return (t + ...); }
+template <typename... T>
+auto sum(T... t) {
+    return (t + ...);
+}
 
 // ======
 // 2.5.6
 // 模板中可以使用 typename 表示类型模板，
 // 也支持用非类型模板，并使用字面量传递模板中的参数
-template <typename T, int num> auto nSum(T value) { return num * value; }
+template <typename T, int num>
+auto nSum(T value) {
+    return num * value;
+}
 // 可以自动推导
-template <auto num> auto doubleSum() { return num << 1; }
+template <auto num>
+auto doubleSum() {
+    return num << 1;
+}
 
 // ======
 // 2.6.1 构造函数可以调用另一个构造函数
 class Base {
-  public:
+   public:
     int val1 = 0;
     int val2 = 0;
     Base() { val1 = 1; }
@@ -88,32 +107,40 @@ class Base {
 
     virtual void printVal1() { cout << "Base: " << val1 << endl; }
     virtual void printVal2() { cout << "Base: " << val2 << endl; }
+    virtual void printVal3() { cout << "printVal3" << endl; }
 };
 
 // 2.6.2, 2.6.3
 class Subclass : public Base {
-  public:
-    using Base::Base; // 继承构造
+   public:
+    using Base::Base;  // 继承构造
 
-    // override 显示告知编译器进行重载，进行父类检查
+    // override 显示告知编译器进行重写方法，进行父类检查
     void printVal1() override { cout << "Subclass: " << val1 << endl; }
 
-    // final 终止虚函数继续重载，可与 override 结合使用
+    // final 终止虚函数继续重写，可与 override 结合使用
     void printVal2() final { cout << "Subclass: " << val2 << endl; }
 
-    // final 必须用在虚函数上，可以是继承的方法
-    virtual void printVal3() final{};
+    // final 需要用在虚函数上
+    // 可以是从基类继承来的虚函数，重写后并标记 final
+    // 也可以是派生类定义的虚函数，并标记为 final，表示不能被继续继承，
+    // 合法但无意义，virtual 表示能继承，final 又不让继承
+    void printVal3() final{};
+    virtual void Test() final{};
+
+    // 报错： Only virtual member functions can be marked 'final'
+    // void Test() final {}
 };
 
 // final 终止类继续重载
 class Subsubclass final : public Subclass {
-  public:
+   public:
     using Subclass ::Subclass;
     void printVal1() override { cout << "Subsubclass: " << val1 << endl; }
 };
 
 class Test {
-  public:
+   public:
     int val = 0;
     // 显式声明使用编译器生成的构造函数
     Test() = default;

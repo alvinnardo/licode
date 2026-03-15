@@ -58,6 +58,8 @@ void test_tuple() {
     cout << grade << endl;
     cout << level << endl;
     cout << name << endl;
+
+    auto [x, y, z] = student;
 }
 
 void test_tuple_type() {
